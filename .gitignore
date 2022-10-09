@@ -1,0 +1,9 @@
+# for test
+testPosts
+test.js
+
+# for size
+node_modules
+
+# for config
+config.json
