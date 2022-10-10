@@ -2,7 +2,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const fsPromise = require('fs/promises');
 const path = require('path');
-const config = require('./config/config');
+const sysConfig = require('./config/config');
 
 const MediumService = require('./MediumService');
 
@@ -24,7 +24,7 @@ class MainService {
 
     const _srcPath = path.join(modulePath, 'template', '_config.json');
 
-    const _dstPath = dstPath || config.defaultConfigPath;
+    const _dstPath = dstPath || sysConfig.defaultConfigPath;
     const _dstJsonPath = path.join(path.dirname(_dstPath), path.parse(_dstPath).name) + '.json';
 
     const mode = isForceInit ? fs.constants.COPYFILE_FICLONE : fs.constants.COPYFILE_EXCL
@@ -79,7 +79,7 @@ class MainService {
    * @param {String} [configPath] config路徑
    */
   static async postArticleByPath(articlePath, configPath) {
-    const mediumAPI = new MediumService(token);
+    const mediumAPI = new MediumService(process.env.MEDIUM_TOKEN);
 
     const config = await this.#getConfig(configPath);
 
@@ -87,7 +87,7 @@ class MainService {
 
     const opt = { isAddTitle: _.get(articleOpts, 'isAddTitle', false) };
 
-    const content = await this.#getArticleByName(articlePath, opt);
+    const { content, title } = await this.#getArticleByName(articlePath, opt);
     await mediumAPI.postArticle(title, content, mediumOpts.contentFormat, mediumOpts);
   }
 
@@ -125,7 +125,7 @@ class MainService {
    * @returns {Promise<Object>} config
    */
   static async #getConfig(configPath) {
-    const _configPath = configPath || config.defaultConfigPath;
+    const _configPath = configPath || sysConfig.defaultConfigPath;
 
     if (!_.eq(path.parse(_configPath).ext, '.json')) throw new Error(`config: ${_configPath} need to be json`);
     if (!fs.existsSync(_configPath)) throw new Error('Config file required, use initConfig() to generate configFile');

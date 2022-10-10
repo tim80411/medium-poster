@@ -88,5 +88,5 @@ use this line to post single article.
 **note: medium config is also depend on config.json**
 
 ```shell
-node -e "require('medium-poster').postArticleByPath('./source/_posts/xxx.md')"
+MEDIUM_TOKEN=xxx node -e "require('medium-poster').postArticleByPath('./source/_posts/xxx.md')"
 ```
