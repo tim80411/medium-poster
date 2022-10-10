@@ -1,6 +1,6 @@
 {
   "name": "medium-poster",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/tim80411/medium-poster.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Timothy Liao",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/tim80411/medium-poster/issues"

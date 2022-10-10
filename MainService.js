@@ -6,6 +6,7 @@ const path = require('path');
 const MediumService = require('./MediumService');
 
 const repoRootPath = process.cwd();
+const modulePath = __dirname;
 
 class MainService {
   static get #validFileExts() {
@@ -21,7 +22,7 @@ class MainService {
   static async initConfig(dstPath = '', opt) {
     const isForceInit = _.get(opt, 'isForceInit', false);
 
-    const _srcPath = path.join(repoRootPath, 'template', 'config.json');
+    const _srcPath = path.join(modulePath, 'template', '_config.json');
 
     const _dstPath = dstPath || path.join(repoRootPath, 'config.json');
     const _dstJsonPath = path.join(path.dirname(_dstPath), path.parse(_dstPath).name) + '.json';
