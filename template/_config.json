@@ -1,0 +1,15 @@
+{
+  "uploadDirPath": "./source/_posts",
+  "excludeMds": [],
+  "mediumOpts": {
+    "canonicalUrl": "https://tim80411.github.io/code-blog/",
+    "publishStatus": "public",
+    "contentFormat": "markdown",
+    "license": "cc-40-by-nc-sa",
+    "tags": [],
+    "publicationUrl": "https://medium.com/on-my-way-coding"
+  },
+  "articleOpts": {
+    "isAddTitle": false
+  }
+}

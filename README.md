@@ -24,15 +24,27 @@ npm install --save medium-poster
 
 - Init config
 ```
-npx medium-poster mainService.js initConfig
+node -e "require('medium-poster').initConfig()"
 ```
 
 - Simple use
+
+add example.js file first
 ```js
-const MLoader = require('medium-loader');
+// example.js
+const MLoader = require('medium-poster');
 const token = process.env.MEDIUM_TOKEN;
-await MLoader.postArticlesByConfig(token);
+
+(async () => {
+  await MLoader.postArticlesByConfig(token);
+})()
+
 // It will post md or html file to Medium base on your config
+```
+
+exec js file
+```bash
+node example.js
 ```
 
 ## Config
@@ -42,7 +54,7 @@ await MLoader.postArticlesByConfig(token);
   "uploadDirPath": "./source/_posts",
   "excludeMds": [],
   "mediumOpts": {
-    "canonicalUrl": "https://medium.com/on-my-way-coding",
+    "canonicalUrl": "https://tim80411.github.io/code-blog/",
     "publishStatus": "public",
     "contentFormat": "markdown",
     "license": "cc-40-by-nc-sa",
@@ -50,19 +62,22 @@ await MLoader.postArticlesByConfig(token);
     "publicationUrl": "https://medium.com/on-my-way-coding"
   },
   "articleOpts": {
-    "isAddTitle": true
+    "isAddTitle": false
   }
 }
 ```
 ### Meaning
-| Config Field              | Required | Description |
-| :------------------------ | -------- | :---------- |
-| uploadDirPath             | V        |             |
-| excludeMds                |          |             |
-| mediumOpts.canonicalUrl   |          |             |
-| mediumOpts.publishStatus  |          |             |
-| mediumOpts.contentFormat  |          |             |
-| mediumOpts.license        |          |             |
-| mediumOpts.tags           |          |             |
-| mediumOpts.publicationUrl |          |             |
-| articleOpts.isAddTitle    |          |             |
+Config field like canonicalUrl is from medium api.
+You can find more detail from [doc](https://github.com/Medium/medium-api-docs#creating-a-post).
+
+| Config Field              | Required | Description                                                                                 |
+| :------------------------ | -------- | :------------------------------------------------------------------------------------------ |
+| uploadDirPath             | V        | 需要上傳文章的資料夾                                                                        |
+| excludeMds                |          | 上傳文章時排除此欄位包含的檔案名稱; 需包含副檔名                                            |
+| mediumOpts.canonicalUrl   |          | (medium api params) 原文章出處                                                              |
+| mediumOpts.publishStatus  |          | (medium api params) 文章狀態: draft, publish, unlisted                                      |
+| mediumOpts.contentFormat  |          | (medium api params) 文章用什麼格式被解析                                                    |
+| mediumOpts.license        |          | (medium api params) license of article;  詳情參照medium api 文件                            |
+| mediumOpts.tags           |          | (medium api params) 文章標籤，僅前三能被用上                                                |
+| mediumOpts.publicationUrl |          | 輸入publication的網址，若token的身份具有在該publication發布文章的權限，則會將文章發佈在之上 |
+| articleOpts.isAddTitle    |          | (for hexo) 此欄位為true時會偵測hexo文章的title並加入內容中                                  |
