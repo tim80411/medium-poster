@@ -1,3 +1,5 @@
+const path = require('path');
+
 const repoRootPath = process.cwd();
 
 const config = {
