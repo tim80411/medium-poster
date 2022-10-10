@@ -2,10 +2,10 @@ const _ = require('lodash');
 const fs = require('fs');
 const fsPromise = require('fs/promises');
 const path = require('path');
+const config = require('./config/config');
 
 const MediumService = require('./MediumService');
 
-const repoRootPath = process.cwd();
 const modulePath = __dirname;
 
 class MainService {
@@ -24,12 +24,13 @@ class MainService {
 
     const _srcPath = path.join(modulePath, 'template', '_config.json');
 
-    const _dstPath = dstPath || path.join(repoRootPath, 'config.json');
+    const _dstPath = dstPath || config.defaultConfigPath;
     const _dstJsonPath = path.join(path.dirname(_dstPath), path.parse(_dstPath).name) + '.json';
 
     const mode = isForceInit ? fs.constants.COPYFILE_FICLONE : fs.constants.COPYFILE_EXCL
 
     await fsPromise.copyFile(_srcPath, _dstJsonPath, mode);
+    console.log('Init config at: ', _dstJsonPath)
   }
 
   /**
@@ -74,24 +75,19 @@ class MainService {
 
   /**
    * 根據給予的路徑及medium設定去發布一則medium文章
-   * @param {String} articlePath 文章路徑; ex: `./source/_pos`
-   * @param {Object} [mediumOpts] mediumOpts
-   * @param {String} [mediumOpts.canonicalUrl] 文章原始路由
-   * @param {String[]} [mediumOpts.tags] medium tags
-   * @param {'public'|'draft'|'list'} [mediumOpts.publishStatus] 發布狀態; default: `draft
-   * @param {Boolean} [mediumOpts.notifyFollowers] 是否通知追蹤者文章已發佈
-   * @param {String} [mediumOpts.license] 文章授權機制
-   * @param {String} [mediumOpts.publicationUrl] 出版(publication)的網址; ex: https://medium.com/on-my-way-coding; 若此欄位有值則會嘗試將文章發於此出版之下
-   * @param {Object} [opt] 選項
-   * @param {Boolean} [opt.isAddTitle] 是否將文章名稱加入到文章內容中; for hexo use
+   * @param {String} articlePath 文章路徑; ex: `./source/_posts/xxx.md`
+   * @param {String} [configPath] config路徑
    */
-  static async postArticleByPath(articlePath, mediumOpts, opt) {
+  static async postArticleByPath(articlePath, configPath) {
     const mediumAPI = new MediumService(token);
 
-    const isAddTitle = _.get(opt, 'isAddTitle', false);
-    const _opt = { isAddTitle };
+    const config = await this.#getConfig(configPath);
 
-    const content = await this.#getArticleByName(articlePath, _opt);
+    const { mediumOpts, articleOpts } = config;
+
+    const opt = { isAddTitle: _.get(articleOpts, 'isAddTitle', false) };
+
+    const content = await this.#getArticleByName(articlePath, opt);
     await mediumAPI.postArticle(title, content, mediumOpts.contentFormat, mediumOpts);
   }
 
@@ -123,8 +119,13 @@ class MainService {
     return { title, content: realContent };
   }
 
+  /**
+   * 取得設定資料
+   * @param {String} [configPath] 
+   * @returns {Promise<Object>} config
+   */
   static async #getConfig(configPath) {
-    const _configPath = configPath || path.join(repoRootPath, 'config.json');
+    const _configPath = configPath || config.defaultConfigPath;
 
     if (!_.eq(path.parse(_configPath).ext, '.json')) throw new Error(`config: ${_configPath} need to be json`);
     if (!fs.existsSync(_configPath)) throw new Error('Config file required, use initConfig() to generate configFile');
