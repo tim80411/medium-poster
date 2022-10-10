@@ -1,6 +1,6 @@
 ## Medium-poster
-This module was born for posting article to Medium.
-And It can help you easily move articles from you local.
+This module was born for posting article to Medium. And It can help you easily move articles from you local.
+
 Because this project's idea is come from hexo's need, so the default config is also fit the hexo.
 
 Hope you using this module and writing articles well.
@@ -81,3 +81,12 @@ You can find more detail from [doc](https://github.com/Medium/medium-api-docs#cr
 | mediumOpts.tags           |          | (medium api params) 文章標籤，僅前三能被用上                                                |
 | mediumOpts.publicationUrl |          | 輸入publication的網址，若token的身份具有在該publication發布文章的權限，則會將文章發佈在之上 |
 | articleOpts.isAddTitle    |          | (for hexo) 此欄位為true時會偵測hexo文章的title並加入內容中                                  |
+
+## Usage Example: post article by article path
+use this line to post single article.
+
+**note: medium config is also depend on config.json**
+
+```shell
+node -e "require('medium-poster').postArticleByPath('./source/_posts/xxx.md')"
+```
