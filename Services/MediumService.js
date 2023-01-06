@@ -10,7 +10,7 @@ class MediumService {
     this.publications = null;
   }
 
-  get apiDomain() {
+  static get apiDomain() {
     return 'https://api.medium.com';
   }
 
@@ -28,10 +28,10 @@ class MediumService {
 
   get apiUrl() {
     return {
-      getMe: `${this.apiDomain}/v1/me`,
-      getPublications: `${this.apiDomain}/v1/users/${this.userId}/publications`,
-      postArticle: `${this.apiDomain}/v1/users/${this.userId}/posts`,
-      postArticleToPublication: `${this.apiDomain}/v1/publications/:publicationId/posts`,
+      getMe: `${MediumService.apiDomain}/v1/me`,
+      getPublications: `${MediumService.apiDomain}/v1/users/${this.userId}/publications`,
+      postArticle: `${MediumService.apiDomain}/v1/users/${this.userId}/posts`,
+      postArticleToPublication: `${MediumService.apiDomain}/v1/publications/:publicationId/posts`,
     };
   }
 
@@ -54,7 +54,7 @@ class MediumService {
 
   /**
    * general use
-   * 
+   *
    * 參考: https://github.com/Medium/medium-api-docs#creating-a-post
    * @param {String} title 標題
    * @param {String} content 文章內容
@@ -66,9 +66,9 @@ class MediumService {
    * @param {Boolean} [mediumOpts.notifyFollowers] 是否通知追蹤者文章已發佈
    * @param {String} [mediumOpts.license] 文章授權機制
    * @param {String} [mediumOpts.publicationUrl] 出版(publication)的網址; ex: https://medium.com/on-my-way-coding; 若此欄位有值則會嘗試將文章發於此出版之下
-   * @returns 
+   * @returns
    */
-  async postArticle(title, content, contentFormat = 'markdown', mediumOpts) {
+  async postArticle(title, content, contentFormat, mediumOpts) {
     if (!title || !content || !contentFormat) {
       throw new Error('title/content required');
     }
@@ -76,7 +76,7 @@ class MediumService {
     const {
       canonicalUrl,
       tags,
-      publishStatus = 'draft',
+      publishStatus,
       notifyFollowers,
       license,
       publicationUrl,
@@ -88,16 +88,16 @@ class MediumService {
       apiUrl,
       {
         title,
-        contentFormat,
+        contentFormat: contentFormat || 'markdown',
         content,
         canonicalUrl,
         tags,
-        publishStatus,
+        publishStatus: publishStatus || 'draft',
         license,
         notifyFollowers,
       },
       this.httpConfig,
-    )
+    );
 
     console.log('Post article success', _.get(res, 'data.data.url', ''));
 
@@ -125,7 +125,7 @@ class MediumService {
       apiUrl = this.apiUrl.postArticleToPublication.replace(':publicationId', publicationId);
     }
 
-    return apiUrl
+    return apiUrl;
   }
 }
 

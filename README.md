@@ -9,10 +9,16 @@ Hope you using this module and writing articles well.
 - node version: 16.2.0
 
 ## Road Map
-- complete README
-- develop CLI
+- inner data saving: saving config, token...
+- source base commander, ex: mp <source> <action> <option>
+- build test framework
 - handle exception
-- writing unit test
+
+## Restriction
+Medium-poster is base on medium api, so it has limitation set by medium.
+
+1. 16 article posting per day.
+2. You should avoid table if you use markdown.
 
 ## Get Started
 - Get token from medium, ref [medium doc](https://github.com/Medium/medium-api-docs#21-self-issued-access-tokens)
@@ -45,6 +51,36 @@ const token = process.env.MEDIUM_TOKEN;
 exec js file
 ```bash
 node example.js
+```
+
+## commander
+- install
+```bash
+npm i --save medium-poster
+```
+
+- instruction
+```bash
+npx mp --help
+```
+
+- init config
+```bash
+npx mp init --help
+```
+
+- post article
+It will post single article by path and all other option will follow config.
+```bash
+npx mp post --help
+npx mp post -t <token> <path>
+```
+
+- batch post articles
+It will post multi articles by config directory.
+```bash
+npx mp batch --help
+npx mp batch -t
 ```
 
 ## Config
