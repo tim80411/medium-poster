@@ -27,11 +27,17 @@ class MainService {
 
     const dstPathP = dstPath || sysConfig.defaultConfigPath;
     const dstJsonPath = `${path.join(path.dirname(dstPathP), path.parse(dstPathP).name)}.json`;
+    const dstSecretPath = path.resolve(modulePath, './secrets.json');
 
     const mode = isForceInit ? fs.constants.COPYFILE_FICLONE : fs.constants.COPYFILE_EXCL;
 
+    const isSecretExists = fs.existsSync(dstSecretPath);
+    if (!isSecretExists) await fsPromise.writeFile(dstSecretPath, JSON.stringify({}));
+
     await fsPromise.copyFile(srcPath, dstJsonPath, mode);
+
     console.log('Init config at: ', dstJsonPath);
+    console.log('Init secrets at: ', dstSecretPath);
   }
 
   /**

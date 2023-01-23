@@ -3,10 +3,15 @@ const _ = require('lodash');
 const { program } = require('commander');
 
 const MainService = require('../MainService');
+const SecretService = require('../Services/SecretService');
 const pjson = require('../package.json');
 
 program
   .version(pjson.version);
+
+program.command('secret')
+  .description('saving secrets in package')
+  .action(() => SecretService.guideInit());
 
 program.command('init')
   .description('init medium-poster config.json')
@@ -20,7 +25,7 @@ program.command('init')
 program.command('post')
   .description('post path article to medium by config.json')
   .argument('<path>', 'article path to post')
-  .requiredOption('-t, --token <token string>', 'medium token to verify user identity')
+  .option('-t, --token <token string>', 'medium token to verify user identity')
   .option('-c, --config-path <path>', 'custom config path')
   .action((path, options) => {
     const postOption = { token: options.token };
@@ -29,7 +34,7 @@ program.command('post')
 
 program.command('batch')
   .description('post multi articles to medium by config.json')
-  .requiredOption('-t, --token <token string>', 'medium token to verify user identity')
+  .option('-t, --token <token string>', 'medium token to verify user identity')
   .option('-c, --config-path <path>', 'custom config path')
   .action((options) => {
     MainService.postArticlesByConfig(options.token, options.configPath);

@@ -9,7 +9,6 @@ Hope you using this module and writing articles well.
 - node version: 16.2.0
 
 ## Road Map
-- inner data saving: saving config, token...
 - source base commander, ex: mp <source> <action> <option>
 - build test framework
 - handle exception

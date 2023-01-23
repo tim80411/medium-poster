@@ -1,13 +1,22 @@
 const axios = require('axios');
 const _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
 
 class MediumService {
   constructor(token) {
-    this.token = token;
-    if (!token) throw new Error('Token Required');
+    const rawSecretData = fs.readFileSync(path.join(MediumService.#modulePath, 'secrets.json'));
+    const secrets = JSON.parse(rawSecretData);
+
+    this.token = token || _.get(secrets, 'MEDIUM_TOKEN', '');
+    if (!this.token) throw new Error('Token Required');
 
     this.userId = null;
     this.publications = null;
+  }
+
+  static get #modulePath() {
+    return path.resolve(__dirname, '../');
   }
 
   static get apiDomain() {

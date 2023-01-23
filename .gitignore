@@ -8,3 +8,4 @@ node_modules
 # for config
 config.json
 .env
+secrets.json
