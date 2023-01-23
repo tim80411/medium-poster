@@ -1,39 +1,17 @@
 #!/usr/bin/env node
 const _ = require('lodash');
 const { program } = require('commander');
-const inquirer = require('inquirer');
-const fsPromise = require('fs/promises');
-const fs = require('fs');
-const path = require('path');
 
 const MainService = require('../MainService');
+const SecretService = require('../Services/SecretService');
 const pjson = require('../package.json');
-
-const modulePath = __dirname;
 
 program
   .version(pjson.version);
 
 program.command('secret')
   .description('saving secrets in package')
-  .action(async () => {
-    try {
-      const answers = await inquirer.prompt([
-        { type: 'input', name: 'MEDIUM_TOKEN', message: 'Please enter medium token' },
-      ]);
-
-      // TODO: 如果檔案換位置這裡就GG，之後在想個方式確保一定能在固定位置，像是固定位置~/.mp之類的
-      const secretPath = path.resolve(modulePath, '../secrets.json');
-      await fsPromise.writeFile(secretPath, JSON.stringify(answers));
-    } catch (error) {
-      if (error.isTtyError) {
-        console.log(`tty error: ${error.name}`, error.message);
-      } else {
-        console.log(`general error: ${error.name}`, error.message);
-      }
-    }
-  });
-// .
+  .action(() => SecretService.guideInit());
 
 program.command('init')
   .description('init medium-poster config.json')
