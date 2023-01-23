@@ -1,10 +1,12 @@
 const axios = require('axios');
 const _ = require('lodash');
 
+const secrets = require('../secrets.json');
+
 class MediumService {
   constructor(token) {
-    this.token = token;
-    if (!token) throw new Error('Token Required');
+    this.token = token || _.get(secrets, 'MEDIUM_TOKEN', '');
+    if (!this.token) throw new Error('Token Required');
 
     this.userId = null;
     this.publications = null;
