@@ -40,11 +40,10 @@ add example.js file first
 const MLoader = require('medium-poster');
 const token = process.env.MEDIUM_TOKEN;
 
+// It will post md or html file to Medium base on your config
 (async () => {
   await MLoader.postArticlesByConfig(token);
 })()
-
-// It will post md or html file to Medium base on your config
 ```
 
 exec js file
@@ -67,6 +66,14 @@ npx mp --help
 ```bash
 npx mp init --help
 ```
+
+- save secret like token
+After saving token, you can use `npx mp batch` or `npx mp post` without attaching token
+```bash
+npx mp secret
+```
+![圖 1](https://i.imgur.com/HpfaRye.png)  
+
 
 - post article
 It will post single article by path and all other option will follow config.
